@@ -57,23 +57,26 @@ fun DoctorAppointmentApp(navController: NavHostController) {
         }
         composable("slotSelection/{doctorName}") { backStackEntry ->
             val doctorName = backStackEntry.arguments?.getString("doctorName") ?: "Unknown"
-            SlotSelectionScreen(
+            BookingScreen(
                 viewModel = viewModel,
                 doctorName = doctorName,
-                onSlotSelected = { selectedSlot ->
-                    // Handle slot selection
+                onBookingComplete = {
+                    navController.navigate("appointments") {
+                        popUpTo("home")
+                    }
                 }
             )
+        }
+        composable("appointments") {
+            AppointmentsScreen(viewModel, navController)
         }
     }
 }
 
-
-
 @Composable
 fun HomeScreen(navController: NavHostController) {
     Scaffold(
-        bottomBar = { BottomNavigationBar() }
+        bottomBar = { BottomNavigationBar(navController) }
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             SearchBar()
@@ -129,8 +132,6 @@ fun BannerSection() {
     )
 }
 
-
-
 @Composable
 fun TopCategoriesSection() {
     val categories = listOf(
@@ -159,28 +160,36 @@ fun TopCategoriesSection() {
     }
 }
 
-
-
 @Composable
-fun BottomNavigationBar() {
+fun BottomNavigationBar(navController: NavHostController) {
+    var selectedItem by remember { mutableStateOf(0) }
+    
     NavigationBar {
         NavigationBarItem(
             icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
             label = { Text("Home") },
-            selected = true,
-            onClick = {}
+            selected = selectedItem == 0,
+            onClick = {
+                selectedItem = 0
+                navController.navigate("home") {
+                    popUpTo("home") { inclusive = true }
+                }
+            }
         )
         NavigationBarItem(
             icon = { Icon(Icons.Default.Person, contentDescription = "AI Bot") },
             label = { Text("AI Bot") },
-            selected = false,
-            onClick = {}
+            selected = selectedItem == 1,
+            onClick = { selectedItem = 1 }
         )
         NavigationBarItem(
             icon = { Icon(Icons.Default.Person, contentDescription = "Appointments") },
             label = { Text("Appointments") },
-            selected = false,
-            onClick = {}
+            selected = selectedItem == 2,
+            onClick = {
+                selectedItem = 2
+                navController.navigate("appointments")
+            }
         )
     }
 }

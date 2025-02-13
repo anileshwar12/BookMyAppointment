@@ -50,8 +50,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.adapters)
-    val material3_version = "1.3.1"
-    implementation("androidx.compose.material3:material3:$material3_version")
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.material3)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
