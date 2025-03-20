@@ -15,11 +15,22 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.AirlineSeatLegroomExtra
+import androidx.compose.material.icons.outlined.ChildCare
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.Hearing
+import androidx.compose.material.icons.outlined.MedicalInformation
+import androidx.compose.material.icons.outlined.MedicalServices
+import androidx.compose.material.icons.outlined.Psychology
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -33,15 +44,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.acdevs.bookmyappointment.R
 import com.acdevs.bookmyappointment.ui.components.CategoryCard
 import com.acdevs.bookmyappointment.ui.components.TopDoctorsSection
@@ -80,7 +93,7 @@ fun HomeScreen(navController: NavHostController) {
     ) { paddingValues ->
         Column(modifier = Modifier.padding(paddingValues)) {
             SearchBar()
-            LocationDropdown()
+            //LocationDropdown()
             BannerSection()
             TopCategoriesSection()
             TopDoctorsSection(navController)
@@ -124,25 +137,41 @@ fun LocationDropdown() {
 
 @Composable
 fun BannerSection() {
-    Image(
-        painter = painterResource(id = R.drawable.banner_placeholder),
-        contentDescription = "Banner",
-        modifier = Modifier.fillMaxWidth().height(150.dp)
-
-    )
+    ElevatedCard(
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.elevatedCardElevation(8.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .height(180.dp)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.banner2),
+            contentDescription = "Promotional Banner",
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(180.dp)
+                .clip(RoundedCornerShape(20.dp)),
+            contentScale = ContentScale.Crop
+        )
+    }
 }
+
+
 
 @Composable
 fun TopCategoriesSection() {
     val categories = listOf(
-        "General Physician" to R.drawable.stethoscope,
-        "Dental Care" to R.drawable.tooth,
-        "Cardiologist" to R.drawable.heart,
-        "Pediatrician" to R.drawable.newborn,
-        "Neurologist" to R.drawable.brain,
-        "Orthopedic" to R.drawable.bones,
-        "ENT Specialist" to R.drawable.eye
+        "General Physician" to Icons.Outlined.MedicalServices,
+        "ENT Specialist" to Icons.Outlined.Hearing,
+        "Cardiologist" to Icons.Outlined.Favorite,
+        "Pediatrician" to Icons.Outlined.ChildCare,
+        "Neurologist" to Icons.Outlined.Psychology,
+        "Orthopedic" to Icons.Outlined.AirlineSeatLegroomExtra,
+        "Dental Care" to Icons.Outlined.MedicalInformation
+
     )
+
 
     Column(modifier = Modifier.padding(16.dp)) {
         Text("Top Categories", fontSize = 20.sp, fontWeight = FontWeight.Bold)
@@ -161,35 +190,31 @@ fun TopCategoriesSection() {
 }
 
 @Composable
-fun BottomNavigationBar(navController: NavHostController) {
-    var selectedItem by remember { mutableStateOf(0) }
-    
+fun BottomNavigationBar(navController: NavController) {
     NavigationBar {
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Home, contentDescription = "Home") },
+            icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home") },
             label = { Text("Home") },
-            selected = selectedItem == 0,
-            onClick = {
-                selectedItem = 0
-                navController.navigate("home") {
-                    popUpTo("home") { inclusive = true }
-                }
-            }
+            selected = false,
+            onClick = { navController.navigate("home") }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Person, contentDescription = "AI Bot") },
+            icon = { Icon(imageVector = Icons.Default.Person, contentDescription = "AI Bot") },
             label = { Text("AI Bot") },
-            selected = selectedItem == 1,
-            onClick = { selectedItem = 1 }
+            selected = false,
+            onClick = { navController.navigate("ai_bot") }
         )
         NavigationBarItem(
-            icon = { Icon(Icons.Default.Person, contentDescription = "Appointments") },
+            icon = { Icon(imageVector = Icons.Default.Book, contentDescription = "Appointments") },
             label = { Text("Appointments") },
-            selected = selectedItem == 2,
-            onClick = {
-                selectedItem = 2
-                navController.navigate("appointments")
-            }
+            selected = false,
+            onClick = { navController.navigate("appointments") }
+        )
+        NavigationBarItem(
+            icon = { Icon(imageVector = Icons.Default.AccountCircle, contentDescription = "Profile") },
+            label = { Text("Profile") },
+            selected = false,
+            onClick = { navController.navigate("profile") }
         )
     }
 }

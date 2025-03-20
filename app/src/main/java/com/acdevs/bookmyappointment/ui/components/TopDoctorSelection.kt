@@ -44,9 +44,9 @@ data class Doctor(
 @Composable
 fun TopDoctorsSection(navController: NavHostController) {
     val doctors = listOf(
-        Doctor("Dr. Smith", "Cardiologist", 4.5f, 15),
-        Doctor("Dr. Johnson", "Pediatrician", 4.8f, 12),
-        Doctor("Dr. Patel", "Neurologist", 4.7f, 10)
+        Doctor("Dr. Chopper", "Cardiologist", 4.5f, 15),
+        Doctor("Dr. Zoro", "Pediatrician", 4.8f, 12),
+        Doctor("Dr. Luffy", "Neurologist", 4.7f, 10)
     )
 
     Column(modifier = Modifier.padding(16.dp)) {
