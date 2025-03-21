@@ -78,7 +78,8 @@ fun DoctorCard(doctor: Doctor, onClick: () -> Unit) {
             .width(280.dp)
             .clip(RoundedCornerShape(16.dp))
             .clickable(onClick = onClick),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary)
     ) {
         Column(
             modifier = Modifier
@@ -88,7 +89,8 @@ fun DoctorCard(doctor: Doctor, onClick: () -> Unit) {
             Text(
                 text = doctor.name,
                 fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(4.dp))
             Text(
