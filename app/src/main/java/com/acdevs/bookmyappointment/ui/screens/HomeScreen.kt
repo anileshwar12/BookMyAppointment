@@ -38,6 +38,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +46,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -58,30 +60,36 @@ import androidx.navigation.compose.composable
 import com.acdevs.bookmyappointment.R
 import com.acdevs.bookmyappointment.ui.components.CategoryCard
 import com.acdevs.bookmyappointment.ui.components.TopDoctorsSection
+import com.acdevs.bookmyappointment.ui.theme.BookMyAppointmentTheme
 import com.acdevs.bookmyappointment.viewmodel.AppointmentViewModel
 
 @Composable
 fun DoctorAppointmentApp(navController: NavHostController) {
     val viewModel: AppointmentViewModel = viewModel()
 
-    NavHost(navController = navController, startDestination = "home") {
-        composable("home") {
-            HomeScreen(navController)
-        }
-        composable("slotSelection/{doctorName}") { backStackEntry ->
-            val doctorName = backStackEntry.arguments?.getString("doctorName") ?: "Unknown"
-            BookingScreen(
-                viewModel = viewModel,
-                doctorName = doctorName,
-                onBookingComplete = {
-                    navController.navigate("appointments") {
-                        popUpTo("home")
+    BookMyAppointmentTheme {
+        NavHost(navController = navController, startDestination = "home") {
+            composable("home") {
+                HomeScreen(navController)
+            }
+            composable("slotSelection/{doctorName}") { backStackEntry ->
+                val doctorName = backStackEntry.arguments?.getString("doctorName") ?: "Unknown"
+                BookingScreen(
+                    viewModel = viewModel,
+                    doctorName = doctorName,
+                    onBookingComplete = {
+                        navController.navigate("appointments") {
+                            popUpTo("home")
+                        }
                     }
-                }
-            )
-        }
-        composable("appointments") {
-            AppointmentsScreen(viewModel, navController)
+                )
+            }
+            composable("appointments") {
+                AppointmentsScreen(viewModel, navController)
+            }
+            composable("chatbot") {
+                ChatScreen(navController)
+            }
         }
     }
 }
@@ -112,28 +120,36 @@ fun SearchBar() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        colors = TextFieldDefaults.colors(
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            focusedContainerColor = MaterialTheme.colorScheme.surface,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        )
     )
 }
 
-@Composable
-fun LocationDropdown() {
-    var expanded by remember { mutableStateOf(false) }
-    var selectedLocation by remember { mutableStateOf("Select Location") }
-    Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
-        Text(
-            text = selectedLocation,
-            modifier = Modifier
-                .clickable { expanded = true }
-                .padding(12.dp)
-                .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
-        )
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            DropdownMenuItem(text = { Text("Hyderabad") }, onClick = { selectedLocation = "Hyderabad"; expanded = false })
-            DropdownMenuItem(text = { Text("Bangalore") }, onClick = { selectedLocation = "Bangalore"; expanded = false })
-        }
-    }
-}
+
+//@Composable
+//fun LocationDropdown() {
+//    var expanded by remember { mutableStateOf(false) }
+//    var selectedLocation by remember { mutableStateOf("Select Location") }
+//    Box(modifier = Modifier.fillMaxWidth().padding(16.dp)) {
+//        Text(
+//            text = selectedLocation,
+//            modifier = Modifier
+//                .clickable { expanded = true }
+//                .padding(12.dp)
+//                .background(MaterialTheme.colorScheme.surface, shape = RoundedCornerShape(8.dp))
+//        )
+//        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+//            DropdownMenuItem(text = { Text("Hyderabad") }, onClick = { selectedLocation = "Hyderabad"; expanded = false })
+//            DropdownMenuItem(text = { Text("Bangalore") }, onClick = { selectedLocation = "Bangalore"; expanded = false })
+//        }
+//    }
+//}
 
 @Composable
 fun BannerSection() {
@@ -191,7 +207,9 @@ fun TopCategoriesSection() {
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
-    NavigationBar {
+    NavigationBar(
+        containerColor = MaterialTheme.colorScheme.secondary
+    ) {
         NavigationBarItem(
             icon = { Icon(imageVector = Icons.Default.Home, contentDescription = "Home") },
             label = { Text("Home") },
@@ -202,7 +220,7 @@ fun BottomNavigationBar(navController: NavController) {
             icon = { Icon(imageVector = Icons.Default.Person, contentDescription = "AI Bot") },
             label = { Text("AI Bot") },
             selected = false,
-            onClick = { navController.navigate("ai_bot") }
+            onClick = { navController.navigate("chatbot") }
         )
         NavigationBarItem(
             icon = { Icon(imageVector = Icons.Default.Book, contentDescription = "Appointments") },
@@ -216,6 +234,7 @@ fun BottomNavigationBar(navController: NavController) {
             selected = false,
             onClick = { navController.navigate("profile") }
         )
+
     }
 }
 

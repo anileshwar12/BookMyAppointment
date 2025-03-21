@@ -44,6 +44,8 @@ android {
 
 dependencies {
 
+    implementation(libs.okhttp)
+    implementation(libs.json)
     implementation(libs.coil.compose)
     implementation(libs.core)
     implementation(libs.androidx.appcompat)

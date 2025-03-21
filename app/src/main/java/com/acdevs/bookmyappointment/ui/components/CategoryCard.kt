@@ -28,7 +28,7 @@ fun CategoryCard(category: String, icon: ImageVector) {
     Card(
         modifier = Modifier.size(100.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
@@ -39,10 +39,11 @@ fun CategoryCard(category: String, icon: ImageVector) {
             Icon(
                 imageVector = icon,
                 contentDescription = category,
-                modifier = Modifier.size(50.dp)
+                modifier = Modifier.size(50.dp),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(8.dp))
-            Text(category, fontSize = 14.sp, fontWeight = FontWeight.Medium, textAlign = TextAlign.Center)
+            Text(category, fontSize = 14.sp, fontWeight = FontWeight.Medium, textAlign = TextAlign.Center, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }
